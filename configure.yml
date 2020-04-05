@@ -41,7 +41,7 @@
 
     - name: Change permissions on /dev/vboxnetctl
       file:
-        path: "/dev/vbxonetctl"
+        path: "/dev/vboxnetctl"
         owner: root
         group: vboxusers
         mode: "u+rw,g+rw"

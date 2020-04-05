@@ -23,6 +23,9 @@ packages:
   - npm
   - rust
   - virtualbox-ose
+  - vagrant
+  - rubygem-vagrant-vbguest
+  - rubygem-vagrant_cloud
 
 system_files:
   - name: rc.conf
