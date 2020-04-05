@@ -1,0 +1,41 @@
+---
+- hosts: beastie
+  remote_user: "{{ user }}"
+  become: yes
+  become_method: sudo
+  gather_facts: True
+
+  tasks:
+    - name: Install packages
+      pkgng:
+        name: "{{ packages }}"
+        state: present
+
+    - name: Ansible Facts
+      debug: var=ansible_facts, verbosity=2
+
+    - name: Add user with bash shell, appending the groups
+      user:
+        name: "{{ user }}" 
+        shell: /usr/local/bin/bash
+        groups: wheel,video
+        append: yes
+
+    - name: System configuration files
+      template:
+        src: "templates/{{ item.name }}.j2"
+        dest: "{{ item.dest }}"
+        owner: root 
+        group: wheel 
+        mode: "{{ item.mode }}"
+      with_items: "{{ system_files }}"
+
+    - name: User configuration files
+      template:
+        src: "templates/{{ item.name }}.j2"
+        dest: "{{ item.dest }}"
+        owner: viking 
+        group: viking 
+        mode: "{{ item.mode }}"
+      with_items: "{{ user_files }}"
+

@@ -1,0 +1,13 @@
+clear_tmp_enable="YES"
+hostname="{{ ansible_facts['hostname'] }}"
+wlans_iwm0="wlan0"
+ifconfig_wlan0="WPA DHCP"
+sshd_enable="YES"
+ntpdate_enable="YES"
+# Set dumpdev to "AUTO" to enable crash dumps, "NO" to disable
+dumpdev="AUTO"
+zfs_enable="YES"
+kld_list="/boot/modules/i915kms.ko"
+slim_enable="YES"
+dbus_enable="YES"
+moused_enable="YES"

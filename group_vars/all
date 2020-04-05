@@ -1,0 +1,58 @@
+user: viking 
+
+packages:
+  - bash
+  - vim
+  - acpica-tools
+  - xorg
+  - slim
+  - slim-freebsd-black-theme
+  - i3-gaps
+  - i3lock
+  - i3status
+  - dunst
+  - urwfonts
+  - rxvt-unicode
+  - urxvt-font-size
+  - powerline-fonts
+  - chromium
+  - nmap
+
+system_files:
+  - name: rc.conf
+    dest: "/etc/rc.conf"
+    mode: "u+rw,g+r,o+r"
+
+  - name: sudoers
+    dest: "/usr/local/etc/sudoers"
+    mode: "u+rw,g+r,o+r"
+
+  - name: sshd_config
+    dest: "/etc/ssh/sshd_config"
+    mode: "u+rw,g+r,o+r"
+
+  - name: slim.conf
+    dest: "/usr/local/etc/slim.conf"
+    mode: "u+rw,g+r,o+r"
+
+user_files:
+  - name: xinitrc
+    dest: "/home/{{ user }}/.xinitrc"
+    mode: "u+rw,g+r"
+
+  - name: Xresources
+    dest: "/home/{{ user }}/.Xresources"
+    mode: "u+rw,g+r"
+
+  - name: i3config 
+    dest: "/home/{{ user }}/.config/i3/config"
+    mode: "u+rw,g+r"
+
+  - name: i3status
+    dest: "/home/{{ user }}/.config/i3status/config"
+    mode: "u+rw,g+r"
+
+  - name: dunstrc
+    dest: "/home/{{ user }}/.dunstrc"
+    mode: "u+rw,g+r"
+
