@@ -3,6 +3,8 @@ user: viking
 packages:
   - bash
   - vim
+  - gmake
+  - cmake
   - acpica-tools
   - xorg
   - slim
@@ -17,10 +19,18 @@ packages:
   - powerline-fonts
   - chromium
   - nmap
+  - go
+  - npm
+  - rust
+  - virtualbox-ose
 
 system_files:
   - name: rc.conf
     dest: "/etc/rc.conf"
+    mode: "u+rw,g+r,o+r"
+
+  - name: loader.conf 
+    dest: "/boot/loader.conf"
     mode: "u+rw,g+r,o+r"
 
   - name: sudoers
@@ -55,4 +65,8 @@ user_files:
   - name: dunstrc
     dest: "/home/{{ user }}/.dunstrc"
     mode: "u+rw,g+r"
+
+  - name: vimrc
+    dest: "/home/{{ user }}/.vimrc"
+    mode: "u+rx,g+r"
 

@@ -18,7 +18,7 @@
       user:
         name: "{{ user }}" 
         shell: /usr/local/bin/bash
-        groups: wheel,video
+        groups: wheel,video,vboxusers,operator
         append: yes
 
     - name: System configuration files
@@ -34,8 +34,113 @@
       template:
         src: "templates/{{ item.name }}.j2"
         dest: "{{ item.dest }}"
-        owner: viking 
-        group: viking 
+        owner: "{{ user }}"
+        group: "{{ user }}"
         mode: "{{ item.mode }}"
       with_items: "{{ user_files }}"
 
+    - name: Change permissions on /dev/vboxnetctl
+      file:
+        path: "/dev/vbxonetctl"
+        owner: root
+        group: vboxusers
+        mode: "u+rw,g+rw"
+
+    - name: Create .vim/autoload directory for pathogen
+      file:
+        path: "/home/{{ user }}/.vim/autoload"
+        owner: "{{ user }}" 
+        group: "{{ user }}"
+        mode: "u+rwx,g+rx"
+        state: directory
+
+    - name: Create .vim/colors directory
+      file:
+        path: "/home/{{ user }}/.vim/colors"
+        owner: "{{ user }}" 
+        group: "{{ user }}"
+        mode: "u+rwx,g+rx"
+        state: directory
+
+    - name: Create .vim/bundle directory
+      file:
+        path: "/home/{{ user }}/.vim/bundle"
+        owner: "{{ user }}" 
+        group: "{{ user }}"
+        mode: "u+rwx,g+rx"
+        state: directory
+
+
+    - name: Install pathogen
+      get_url:
+        url: https://tpo.pe/pathogen.vim
+        dest: "/home/{{ user }}/.vim/autoload/pathogen.vim"
+        mode: "u+rwx,g+rx"
+
+    - name: Install wallaby color scheme for vim
+      get_url:
+        url: https://raw.githubusercontent.com/rhysd/wallaby.vim/master/colors/wallaby.vim
+        dest: "/home/{{ user }}/.vim/colors/wallaby.vim"
+        mode: "u+rwx,g+rx"
+
+    - name: Install airline for vim
+      git:
+        repo: https://github.com/vim-airline/vim-airline
+        dest: "/home/{{ user }}/.vim/bundle/vim-airline"
+
+    - name: Install python-mode for vim
+      git:
+        repo: https://github.com/klen/python-mode
+        dest: "/home/{{ user }}/.vim/bundle/python-mode"
+
+    - name: Install jedi-vim for vim
+      git:
+        repo: https://github.com/davidhalter/jedi-vim.git
+        dest: "/home/{{ user }}/.vim/bundle/jedi-vim"
+        recursive: yes
+
+    - name: Install fugitive for vim
+      git:
+        repo: https://github.com/tpope/vim-fugitive
+        dest: "/home/{{ user }}/.vim/bundle/fugitive"
+
+    - name: Install gitgutter for vim
+      git:
+        repo: https://github.com/airblade/vim-gitgutter.git
+        dest: "/home/{{ user }}/.vim/bundle/vim-gitgutter"
+
+    - name: Install unite for vim
+      git:
+        repo: https://github.com/Shougo/unite.vim
+        dest: "/home/{{ user }}/.vim/bundle/unite"
+
+    - name: Install vimproc for vim
+      git:
+        repo: https://github.com/Shougo/vimproc.vim.git
+        dest: "/home/{{ user }}/.vim/bundle/vimproc"
+
+    - name: Install nerdtree for vim
+      git:
+        repo: https://github.com/preservim/nerdtree.git
+        dest: "/home/{{ user }}/.vim/bundle/nerdtree"
+
+    - name: Set user to own .vim directory and all subdirectories 
+      file:
+        path: "/home/{{ user }}/.vim"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        recurse: yes
+
+    - name: Run make for vimproc
+      shell: gmake
+      args:
+        chdir: "/home/{{ user }}/.vim/bundle/vimproc"
+        creates: "/home/{{ user }}/.vim/bundle/vimproc/lib/vimproc_freebsd_amd64.so"
+      become: yes
+
+    - name: Set user to own .vim directory and all subdirectories 
+      file:
+        path: "/home/{{ user }}/.vim"
+        owner: "{{ user }}"
+        group: "{{ user }}"
+        recurse: yes
